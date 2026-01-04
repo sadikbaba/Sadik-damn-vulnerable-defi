@@ -7,6 +7,7 @@ import {DamnValuableToken} from "../../src/DamnValuableToken.sol";
 import {UnstoppableVault, Owned} from "../../src/unstoppable/UnstoppableVault.sol";
 import {UnstoppableMonitor} from "../../src/unstoppable/UnstoppableMonitor.sol";
 
+
 contract UnstoppableChallenge is Test {
     address deployer = makeAddr("deployer");
     address player = makeAddr("player");
@@ -17,7 +18,7 @@ contract UnstoppableChallenge is Test {
     DamnValuableToken public token;
     UnstoppableVault public vault;
     UnstoppableMonitor public monitorContract;
-
+   
     modifier checkSolvedByPlayer() {
         vm.startPrank(player, player);
         _;
@@ -29,11 +30,11 @@ contract UnstoppableChallenge is Test {
      * SETS UP CHALLENGE - DO NOT TOUCH
      */
     function setUp() public {
-        startHoax(deployer);
+    startHoax(deployer);
         // Deploy token and vault
         token = new DamnValuableToken();
         vault = new UnstoppableVault({_token: token, _owner: deployer, _feeRecipient: deployer});
-
+        
         // Deposit tokens to vault
         token.approve(address(vault), TOKENS_IN_VAULT);
         vault.deposit(TOKENS_IN_VAULT, address(deployer));
@@ -91,7 +92,8 @@ contract UnstoppableChallenge is Test {
      * CODE YOUR SOLUTION HERE
      */
     function test_unstoppable() public checkSolvedByPlayer {
-        
+      token.transfer(address(vault),1e18);
+      //  vault.flashLoan(borrower, address(token), INITIAL_PLAYER_TOKEN_BALANCE, "");
     }
 
     /**
